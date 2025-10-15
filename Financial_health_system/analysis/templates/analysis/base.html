@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Financial Health System</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <h1>📊 Financial Health Scoring System</h1>
+  <nav>
+    <a href="{% url 'upload_pnl' %}">Upload</a> |
+    <a href="{% url 'dashboard' %}">Dashboard</a>
+  </nav>
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+</html>
