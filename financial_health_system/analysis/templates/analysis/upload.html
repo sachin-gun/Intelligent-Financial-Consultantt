@@ -1,0 +1,39 @@
+{% extends 'analysis/base.html' %}
+{% block content %}
+<h2>Upload Profit & Loss Statement</h2>
+
+<form method="POST" action="" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <label>Company Name:</label>
+  <input type="text" name="company_name" required>
+
+  <label>Period:</label>
+  <input type="text" name="period" required>
+
+  <label>Upload File:</label>
+  <input type="file" name="file" accept=".xlsx,.xls" required>
+
+  <button type="submit" class="btn btn-primary">Upload</button>
+
+  {% if error %}
+  <p style="color:red;">{{ error }}</p>
+  {% endif %}
+</form>
+{% endblock %}
+
+
+{% comment %} {% extends 'analysis/base.html' %}
+{% block content %}
+<h2>Upload Profit & Loss Statement</h2>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="text" name="company_name" placeholder="Company Name" required><br><br>
+  <input type="text" name="period" placeholder="Period (e.g. Apr 2024 - Mar 2025)" required><br><br>
+  <input type="file" name="file" accept=".xlsx" required><br><br>
+  <button type="submit">Upload</button>
+</form>
+{% endblock %} {% endcomment %}
+
+
+

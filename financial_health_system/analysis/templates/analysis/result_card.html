@@ -1,0 +1,175 @@
+{% extends 'analysis/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="max-width: 1000px;">
+  <h2>Financial Health Report</h2>
+
+  <div class="card" style="margin: 12px 0; padding: 16px;">
+    <h3>{{ company }} — {{ period }}</h3>
+    <p>Overall Score: <strong>{{ score|floatformat:2 }}</strong> |
+    Category: <strong>{{ category }}</strong></p>
+  </div>
+
+  <div class="grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+    <div class="card" style="padding:16px;">
+      <h4>Raw Values</h4>
+      <table>
+        <tr><td>Total Income</td><td>{{ income|floatformat:2 }}</td></tr>
+        <tr><td>Gross Profit</td><td>{{ gross_profit|floatformat:2 }}</td></tr>
+        <tr><td>Admin Expenses</td><td>{{ admin_exp|floatformat:2 }}</td></tr>
+        <tr><td>Distribution Costs</td><td>{{ dist_exp|floatformat:2 }}</td></tr>
+        <tr><td>Finance Costs</td><td>{{ finance_exp|floatformat:2 }}</td></tr>
+        <tr><td>Net Profit</td><td>{{ net_profit|floatformat:2 }}</td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="padding:16px;">
+      <h4>Financial Ratios</h4>
+      <table>
+        <tr><td>Net Profit Margin</td><td>{{ ratios.net_profit_margin|floatformat:2 }}%</td></tr>
+        <tr><td>Expense Ratio</td><td>{{ ratios.expense_ratio|floatformat:2 }}%</td></tr>
+        <tr><td>Gross Profit Margin</td><td>{{ ratios.gross_profit_margin|floatformat:2 }}%</td></tr>
+        <tr><td>Finance Cost Ratio</td><td>{{ ratios.finance_cost_ratio|floatformat:2 }}%</td></tr>
+        <tr><td>Revenue Growth Rate</td><td>{{ ratios.revenue_growth_rate|floatformat:2 }}%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px; padding:16px;">
+    <h4>Weighted Contributions</h4>
+    <table>
+      {% for k,v in contributions.items %}
+      <tr><td>{{ k }}</td><td style="text-align:right">{{ v|floatformat:2 }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  
+
+  <div class="card" style="margin-top:16px; padding:16px; background:#f8fafc;">
+    <h4>📊 Advisory Report</h4>
+    <pre style="white-space:pre-wrap; font-family:inherit;">{{ advisory }}</pre>
+  </div>
+
+  <div style="margin-top:16px;">
+    <a class="btn btn-secondary" href="{% url 'upload_pnl' %}">Upload Another</a>
+    <a class="btn btn-primary" href="{% url 'dashboard' %}">Dashboard</a>
+  </div>
+</div>
+{% endblock %}
+
+
+
+
+{% comment %} {% extends 'analysis/base.html' %}
+{% block content %}
+<h2>📊 Financial Health Summary</h2>
+
+<table border="1" cellpadding="8">
+  <tr><th>Company</th><td>{{ company }}</td></tr>
+  <tr><th>Period</th><td>{{ period }}</td></tr>
+  <tr><th>Total Income</th><td>{{ income|floatformat:2 }}</td></tr>
+  <tr><th>Gross Profit</th><td>{{ gross_profit|floatformat:2 }}</td></tr>
+  <tr><th>Admin Expenses</th><td>{{ admin_exp|floatformat:2 }}</td></tr>
+  <tr><th>Distribution Costs</th><td>{{ dist_exp|floatformat:2 }}</td></tr>
+  <tr><th>Finance Costs</th><td>{{ finance_exp|floatformat:2 }}</td></tr>
+  <tr><th>Net Profit</th><td>{{ net_profit|floatformat:2 }}</td></tr>
+  <tr><th>Weighted Score</th><td><b>{{ score|floatformat:2 }}</b></td></tr>
+  <tr><th>Category</th><td><b>{{ category }}</b></td></tr>
+  <tr><th>Suggestion</th><td>{{ suggestion }}</td></tr>
+</table>
+
+
+<br>
+<h3>📈 Weighted Score Calculation</h3>
+<table border="1" cellpadding="8">
+  <tr>
+    <th>Factor</th>
+    <th>Contribution (out of 100)</th>
+  </tr>
+  {% for factor, value in contributions.items %}
+  <tr>
+    <td>{{ factor }}</td>
+    <td>{{ value|floatformat:2 }}</td>
+  </tr>
+  {% endfor %}
+  <tr>
+    <th>Total Weighted Score</th>
+    <th>{{ score|floatformat:2 }}</th>
+  </tr>
+</table>
+
+<br>
+<h3>Status: 
+  {% if category == "High" %}
+    <span style="color:green;">🟢 High (Good)</span>
+  {% elif category == "Medium" %}
+    <span style="color:orange;">🟠 Medium (Ok)</span>
+  {% else %}
+    <span style="color:red;">🔴 Low (Bad)</span>
+  {% endif %}
+</h3>
+<br>
+
+<h3>📊 Financial Summary</h3>
+<ul>
+  {% for key, value in metrics.items %}
+  <li>{{ key }}: {{ value|floatformat:2 }}%</li>
+  {% endfor %}
+</ul>
+
+<h3>💡 AI Financial Advisor Insights</h3>
+<div style="background-color:#f8f9fa; border-radius:8px; padding:15px;">
+  <p>{{ llm_advice|linebreaks }}</p>
+</div>
+
+<a href="{% url 'dashboard' %}">View Dashboard →</a>
+{% endblock %}  {% endcomment %}
+
+
+
+
+{% comment %} {% extends 'analysis/base.html' %}
+{% block content %}
+<h2>📊 Financial Health Summary</h2>
+
+
+
+<br>
+<h3>📈 Weighted Score Calculation</h3>
+<table border="1" cellpadding="8">
+  <tr>
+    <th>Factor</th>
+    <th>Contribution (out of 100)</th>
+  </tr>
+  {% for factor, value in contributions.items %}
+  <tr>
+    <td>{{ factor }}</td>
+    <td>{{ value|floatformat:2 }}</td>
+  </tr>
+  {% endfor %}
+  <tr>
+    <th>Total Weighted Score</th>
+    <th>{{ score|floatformat:2 }}</th>
+  </tr>
+</table>
+
+<br>
+<h3>Status: 
+  {% if category == "High" %}
+    <span style="color:green;">🟢 High (Good)</span>
+  {% elif category == "Medium" %}
+    <span style="color:orange;">🟠 Medium (Ok)</span>
+  {% else %}
+    <span style="color:red;">🔴 Low (Bad)</span>
+  {% endif %}
+</h3>
+
+<p><b>Suggestion:</b> {{ suggestion }}</p>
+<br>
+<a href="{% url 'dashboard' %}">View Dashboard →</a>
+{% endblock %} {% endcomment %}
+
+
+
